@@ -12,13 +12,13 @@ import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 
-public class MyBenchmark {
+    public class MyBenchmark {
 
-    /*public static void main(String[] args) {
-        new MyBenchmark().testInversionSumForLoop();
+    public static void main(String[] args) {
+        /*new MyBenchmark().testInversionSumForLoop();*/
         new MyBenchmark().testInversionSumUsingStreams();
-        new MyBenchmark().testInversionSumUsingCernColt();
-    }*/
+        /*new MyBenchmark().testInversionSumUsingCernColt();*/
+    }
 
 
     public static double[] array;
@@ -31,9 +31,9 @@ public class MyBenchmark {
         }
     }
 
-    @Benchmark
+    /*@Benchmark
     @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    @OutputTimeUnit(TimeUnit.NANOSECONDS)*/
     public void testInversionSumForLoop(){
         double result = 0;
         for (int i = 0; i < array.length; i++) {
@@ -42,18 +42,18 @@ public class MyBenchmark {
         /*System.out.println("Result testForLoopInversionSum " + result);*/
     }
 
-    @Benchmark
+    /*@Benchmark
     @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    @OutputTimeUnit(TimeUnit.NANOSECONDS)*/
     public void testInversionSumUsingStreams(){
         double result = 0;
         result = Arrays.stream(array).map(d -> 1/d).sum();
         /*System.out.println(Result testInversionSumUsingStreams " + result);*/
     }
 
-    @Benchmark
+    /*@Benchmark
     @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    @OutputTimeUnit(TimeUnit.NANOSECONDS)*/
     public void testInversionSumUsingCernColt(){
         double result = Descriptive.sumOfInversions(new DoubleArrayList(array), 0, array.length-1);
         /*System.out.println("Result testInversionSumUsingCernColt " + result);*/
@@ -67,4 +67,9 @@ public class MyBenchmark {
  * MyBenchmark.testInversionSumForLoop        avgt  200    1.442 ±  0.085  ns/op
  * MyBenchmark.testInversionSumUsingCernColt  avgt  200  574.431 ±  7.045  ns/op
  * MyBenchmark.testInversionSumUsingStreams   avgt  200  674.014 ± 20.232  ns/op
+ */
+
+/**
+ * Command to get JFR
+ * java -XX:+UnlockCommercialFeatures -XX:+FlightRecorder -XX:FlightRecorderOptions=defaultrecording=true,dumponexit=true,dumponexitpath=/tmp/MyBenchmark.jfr MyBenchmark
  */
