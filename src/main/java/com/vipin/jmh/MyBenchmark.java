@@ -45,17 +45,6 @@ import org.openjdk.jmh.annotations.OutputTimeUnit;
 
 public class MyBenchmark {
 
-    /*@Benchmark
-    public void testMethod() {
-        // This is a demo/sample template for building your JMH benchmarks. Edit as needed.
-        // Put your benchmark code here.
-	List<Integer> lst = IntStream.rangeClosed(1,1000000).boxed().collect(Collectors.toList());
-
-        int total = lst.stream().mapToInt(Integer::intValue).sum();
-
-        System.out.println(total);
-    }*/
-
     /*public static void main(String[] args) {
         new MyBenchmark().testInversionSumForLoop();
         new MyBenchmark().testInversionSumUsingStreams();
@@ -102,3 +91,11 @@ public class MyBenchmark {
     }
 
 }
+
+/**
+ * Results of above test
+ * Benchmark                                  Mode  Cnt    Score    Error  Units
+ * MyBenchmark.testInversionSumForLoop        avgt  200    1.442 ±  0.085  ns/op
+ * MyBenchmark.testInversionSumUsingCernColt  avgt  200  574.431 ±  7.045  ns/op
+ * MyBenchmark.testInversionSumUsingStreams   avgt  200  674.014 ± 20.232  ns/op
+ */
