@@ -9,6 +9,7 @@ import java.util.stream.IntStream;
 import cern.colt.list.DoubleArrayList;
 import cern.jet.stat.Descriptive;
 import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.infra.Blackhole;
 import org.openjdk.jmh.results.Result;
 import org.openjdk.jmh.results.RunResult;
 import org.openjdk.jmh.runner.Runner;
@@ -47,28 +48,31 @@ public class MyBenchmark {
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.NANOSECONDS)
-    public void testInversionSumForLoop(){
+    public void testInversionSumForLoop(Blackhole blackhole){
         double result = 0;
         for (int i = 0; i < array.length; i++) {
             result += 1.0/array[i];
         }
+        blackhole.consume(result);
         /*System.out.println("Result testForLoopInversionSum " + result);*/
     }
 
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.NANOSECONDS)
-    public void testInversionSumUsingStreams(){
+    public void testInversionSumUsingStreams(Blackhole blackhole){
         double result = 0;
         result = Arrays.stream(array).map(d -> 1/d).sum();
+        blackhole.consume(result);
         /*System.out.println(Result testInversionSumUsingStreams " + result);*/
     }
 
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.NANOSECONDS)
-    public void testInversionSumUsingCernColt(){
+    public void testInversionSumUsingCernColt(Blackhole blackhole){
         double result = Descriptive.sumOfInversions(new DoubleArrayList(array), 0, array.length-1);
+        blackhole.consume(result);
         /*System.out.println("Result testInversionSumUsingCernColt " + result);*/
     }
 
@@ -101,4 +105,12 @@ public class MyBenchmark {
 /**
  * Command to get JFR
  * java -XX:+UnlockCommercialFeatures -XX:+FlightRecorder -XX:FlightRecorderOptions=defaultrecording=true,dumponexit=true,dumponexitpath=/tmp/MyBenchmark.jfr MyBenchmark
+ */
+
+/**
+ * Updated results after adding Blackhole.consume
+ * Benchmark                                  Mode  Cnt    Score    Error  Units
+ * MyBenchmark.testInversionSumForLoop        avgt  200  525.498 ± 10.458  ns/op
+ * MyBenchmark.testInversionSumUsingCernColt  avgt  200  517.930 ±  2.080  ns/op
+ * MyBenchmark.testInversionSumUsingStreams   avgt  200  582.103 ±  3.261  ns/op
  */
