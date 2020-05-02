@@ -1,20 +1,15 @@
 package com.vipin.jmh;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import cern.colt.list.DoubleArrayList;
 import cern.jet.stat.Descriptive;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
-import org.openjdk.jmh.results.Result;
-import org.openjdk.jmh.results.RunResult;
 import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
+
+import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 @State(Scope.Thread)
 public class MyBenchmark {
@@ -45,35 +40,32 @@ public class MyBenchmark {
         }
     }
 
-    @Benchmark
+    /*@Benchmark
     @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    @OutputTimeUnit(TimeUnit.NANOSECONDS)*/
     public void testInversionSumForLoop(Blackhole blackhole){
         double result = 0;
         for (int i = 0; i < array.length; i++) {
             result += 1.0/array[i];
         }
         blackhole.consume(result);
-        /*System.out.println("Result testForLoopInversionSum " + result);*/
     }
 
-    @Benchmark
+    /*@Benchmark
     @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    @OutputTimeUnit(TimeUnit.NANOSECONDS)*/
     public void testInversionSumUsingStreams(Blackhole blackhole){
         double result = 0;
         result = Arrays.stream(array).map(d -> 1/d).sum();
         blackhole.consume(result);
-        /*System.out.println(Result testInversionSumUsingStreams " + result);*/
     }
 
-    @Benchmark
+    /*@Benchmark
     @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    @OutputTimeUnit(TimeUnit.NANOSECONDS)*/
     public void testInversionSumUsingCernColt(Blackhole blackhole){
         double result = Descriptive.sumOfInversions(new DoubleArrayList(array), 0, array.length-1);
         blackhole.consume(result);
-        /*System.out.println("Result testInversionSumUsingCernColt " + result);*/
     }
 
 }
