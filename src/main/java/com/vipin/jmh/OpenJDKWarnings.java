@@ -44,6 +44,8 @@ public class OpenJDKWarnings {
         stringList.add("3String");
         stringList.add("4String");
         stringList.add("5String");
+        stringList.add("");
+        stringList.add("");
     }
 
     @Benchmark
@@ -75,29 +77,33 @@ public class OpenJDKWarnings {
     public void testAnyMatchOnEmptyList(Blackhole blackhole) {
         blackhole.consume(emptyStringList.stream().anyMatch(Objects::nonNull));
     }
+
+    @Benchmark
+    public void testStreamFilterFindAnyIsPresent(Blackhole blackhole)
+    {
+        blackhole.consume(stringList.stream().filter(String::isEmpty).findAny().isPresent());
+    }
+
+    @Benchmark
+    public void testStreamAnyMatch(Blackhole blackhole)
+    {
+        blackhole.consume(stringList.stream().anyMatch(String::isEmpty));
+    }
 }
 
 /**
- java -jar target/benchmarks.jar -f 1 -i 5
- Benchmark                                             Mode  Cnt    Score    Error  Units
- OpenJDKWarnings.testAnyMatchOnEmptyList               avgt    5   64.266 ±  3.560  ns/op
- OpenJDKWarnings.testAnyMatchOnNonEmptyList            avgt    5   73.972 ±  6.560  ns/op
- OpenJDKWarnings.testFindFirstIsPresentOnEmptyList     avgt    5   75.822 ±  2.976  ns/op
- OpenJDKWarnings.testFindFirstIsPresentOnNonEmptyList  avgt    5   88.201 ±  4.638  ns/op
- OpenJDKWarnings.testStreamCollectToJoinStrings        avgt    5  400.448 ± 48.007  ns/op
- OpenJDKWarnings.testStringJoin                        avgt    5  213.326 ± 90.728  ns/op
-
-
+ *
  java -jar target/benchmarks.jar
- # Run complete. Total time: 00:40:33
+ # Run complete. Total time: 00:54:05
 
- Benchmark                                             Mode  Cnt    Score   Error  Units
- OpenJDKWarnings.testAnyMatchOnEmptyList               avgt  200   66.195 ± 1.482  ns/op
- OpenJDKWarnings.testAnyMatchOnNonEmptyList            avgt  200   71.014 ± 1.641  ns/op
- OpenJDKWarnings.testFindFirstIsPresentOnEmptyList     avgt  200   76.845 ± 0.559  ns/op
- OpenJDKWarnings.testFindFirstIsPresentOnNonEmptyList  avgt  200   88.801 ± 0.966  ns/op
- OpenJDKWarnings.testStreamCollectToJoinStrings        avgt  200  264.487 ± 2.117  ns/op
- OpenJDKWarnings.testStringJoin                        avgt  200  154.835 ± 0.757  ns/op
-
+ Benchmark                                             Mode  Cnt    Score    Error  Units
+ OpenJDKWarnings.testFindFirstIsPresentOnEmptyList     avgt  200   73.907 ±  0.350  ns/op
+ OpenJDKWarnings.testAnyMatchOnEmptyList               avgt  200   62.057 ±  0.379  ns/op
+ OpenJDKWarnings.testFindFirstIsPresentOnNonEmptyList  avgt  200   84.591 ±  0.709  ns/op
+ OpenJDKWarnings.testAnyMatchOnNonEmptyList            avgt  200   63.793 ±  0.239  ns/op
+ OpenJDKWarnings.testStreamFilterFindAnyIsPresent      avgt  200  122.902 ±  0.673  ns/op
+ OpenJDKWarnings.testStreamAnyMatch                    avgt  200   94.402 ±  2.989  ns/op
+ OpenJDKWarnings.testStreamCollectToJoinStrings        avgt  200  282.570 ±  6.308  ns/op
+ OpenJDKWarnings.testStringJoin                        avgt  200  174.919 ± 13.343  ns/op
 
  */
